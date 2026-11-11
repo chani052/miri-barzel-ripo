@@ -217,11 +217,32 @@
     .flame.on .fb, .flame.on .halo { animation: none; }
     .smoke { display: none; }
   }
+  /* site nav */
+  .site-nav {
+    position: relative; z-index: 2;
+    display: flex; justify-content: center; gap: 4px;
+    width: max-content; max-width: calc(100% - 32px);
+    margin: 16px auto 0; padding: 5px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .06);
+    border: 1px solid rgba(255, 255, 255, .11);
+  }
+  .site-nav a {
+    padding: 8px 16px; border-radius: 999px;
+    color: #aeb3df; text-decoration: none; font-size: .95rem; font-weight: 500;
+    white-space: nowrap;
+  }
+  .site-nav a:hover { color: #fff; }
+  .site-nav a[aria-current="page"] { background: linear-gradient(180deg, #ffd780, #f0a23b); color: #2b1a04; }
 </style>
 </head>
 <body>
 <div class="sky" id="sky"></div>
 <div class="bokeh"></div>
+
+<nav class="site-nav" aria-label="ניווט ראשי">
+  <a href="index.html" aria-current="page">אור של חנוכה</a>
+</nav>
 
 <main class="wrap">
   <header class="hero">
