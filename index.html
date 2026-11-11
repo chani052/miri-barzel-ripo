@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>אור של חנוכה</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Suez+One&family=Rubik:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    --sky-top: #26307e;
+    --sky-mid: #121848;
+    --sky-low: #0b0f30;
+    --ink: #f3f4ff;
+    --muted: #aeb3df;
+    --faint: #7f86bf;
+    --card: rgba(255, 255, 255, .055);
+    --card-line: rgba(255, 255, 255, .11);
+    --chip: rgba(255, 255, 255, .07);
+    --gold: #ffc861;
+    --gold-deep: #e8962e;
+    --pink: #ff6fa5;
+    color-scheme: dark;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --sky-top: #1c2468;
+      --sky-mid: #0e1340;
+      --sky-low: #080b26;
+    }
+  }
+  :root[data-theme="dark"] { --sky-top: #1c2468; --sky-mid: #0e1340; --sky-low: #080b26; }
+
+  *, *::before, *::after { box-sizing: inherit; }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  body {
+    margin: 0;
+    min-height: 100%;
+    color: var(--ink);
+    font-family: "Rubik", "Segoe UI", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    background: radial-gradient(120% 70% at 50% -10%, var(--sky-top) 0%, var(--sky-mid) 45%, var(--sky-low) 100%) fixed;
+    background-color: var(--sky-low);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  button { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+  /* sky */
+  .sky { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+  .sky i {
+    position: absolute; width: 2px; height: 2px; border-radius: 50%;
+    background: #fff; opacity: .5;
+    animation: tw 3.5s ease-in-out infinite alternate;
+  }
+  .bokeh {
+    position: fixed; inset: auto 0 0 0; height: 45vh; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(14px 14px at 8% 70%, rgba(255,111,165,.35), transparent 70%),
+      radial-gradient(10px 10px at 18% 88%, rgba(80,200,255,.3), transparent 70%),
+      radial-gradient(16px 16px at 82% 76%, rgba(255,200,97,.3), transparent 70%),
+      radial-gradient(12px 12px at 92% 60%, rgba(150,120,255,.3), transparent 70%),
+      radial-gradient(9px 9px at 70% 92%, rgba(80,220,160,.3), transparent 70%),
+      radial-gradient(11px 11px at 30% 95%, rgba(255,160,80,.3), transparent 70%);
+  }
+  @keyframes tw { from { opacity: .15; } to { opacity: .8; } }
+
+  .wrap { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 0 20px 40px; }
+
+  /* hero */
+  .hero { text-align: center; padding: 34px 0 22px; }
+  h1 {
+    font-family: "Suez One", "Frank Ruhl Libre", Georgia, serif;
+    font-weight: 400;
+    font-size: clamp(3.2rem, 9vw, 5.6rem);
+    line-height: 1.05;
+    margin: 0;
+    background: linear-gradient(270deg, #ff7aa8 0%, #ffa24a 45%, #ffd75e 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 0 22px rgba(255, 170, 80, .35));
+  }
+  .bunting { display: block; width: min(380px, 80vw); height: 34px; margin: 6px auto 8px; }
+  .lead { margin: 0 auto; color: var(--muted); max-width: 42ch; font-size: 1.05rem; }
+
+  .countdown { display: flex; justify-content: center; gap: 10px; margin-top: 18px; }
+  .cd {
+    width: 70px; padding: 8px 0 6px; text-align: center;
+    background: var(--card); border: 1px solid var(--card-line); border-radius: 14px;
+  }
+  .cd b { display: block; font-family: "Suez One", Georgia, serif; font-weight: 400; font-size: 1.75rem; line-height: 1.1; color: var(--gold); font-variant-numeric: tabular-nums; }
+  .cd span { font-size: .78rem; color: var(--muted); }
+  .cd-note { margin: 10px 0 0; font-size: .9rem; color: var(--faint); }
+  .cd-note strong { color: var(--ink); font-weight: 500; }
+
+  /* cards */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--card-line);
+    border-radius: 26px;
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+  .card h2 {
+    font-family: "Suez One", Georgia, serif; font-weight: 400;
+    font-size: 1.6rem; line-height: 1.2; margin: 0;
+  }
+  .card .hint { color: var(--muted); margin: 2px 0 0; font-size: .92rem; }
+
+  /* menorah card */
+  .menorah-card { position: relative; overflow: hidden; padding: 22px 22px 20px; }
+  .menorah-card .glow {
+    position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(45% 50% at 50% 30%, rgba(255, 185, 90, .32), rgba(255, 140, 60, .08) 55%, transparent 75%);
+    opacity: 0; transition: opacity 800ms ease;
+  }
+  .menorah-head { position: relative; display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap; }
+  .night-label { font-family: "Suez One", Georgia, serif; color: var(--gold); font-size: 1.1rem; }
+  .menorah { position: relative; display: block; width: 100%; max-width: 620px; height: auto; margin: 6px auto 0; }
+
+  .flame { transform-box: fill-box; transform-origin: 50% 100%; transform: scale(0); opacity: 0; }
+  .flame.on { animation: ignite 480ms cubic-bezier(.2, .9, .3, 1.35) forwards; }
+  .flame.on .fb { transform-box: fill-box; transform-origin: 50% 100%; animation: flicker 1.7s ease-in-out infinite alternate; }
+  .flame.on .halo { animation: pulse 2.4s ease-in-out infinite alternate; }
+  .flame.out { animation: snuff 260ms ease-in forwards; }
+  @keyframes ignite { from { transform: scale(.1); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  @keyframes snuff { from { transform: scale(1); opacity: 1; } to { transform: scale(.1, .3); opacity: 0; } }
+  @keyframes flicker {
+    0% { transform: scale(1, 1) skewX(0); }
+    30% { transform: scale(.95, 1.06) skewX(-3deg); }
+    60% { transform: scale(1.04, .96) skewX(2deg); }
+    100% { transform: scale(.98, 1.03) skewX(-1deg); }
+  }
+  @keyframes pulse { from { opacity: .7; } to { opacity: 1; } }
+  .smoke { fill: none; stroke: rgba(230, 232, 255, .55); stroke-width: 2; stroke-linecap: round; animation: smoke 1.4s ease-out forwards; }
+  @keyframes smoke { from { opacity: .9; transform: translateY(0); } to { opacity: 0; transform: translateY(-26px); } }
+
+  .controls { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-top: 10px; }
+  .nights { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip {
+    min-width: 44px; height: 44px; padding: 0 6px;
+    border-radius: 12px; border: 1px solid var(--card-line);
+    background: var(--chip); cursor: pointer;
+    font-family: "Suez One", Georgia, serif; font-size: 1.15rem;
+    transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+  }
+  .chip:hover { border-color: rgba(255, 200, 97, .55); }
+  .chip[aria-pressed="true"] { background: linear-gradient(180deg, #ffd780, #f0a23b); color: #2b1a04; border-color: transparent; }
+  .chip.tonight { box-shadow: 0 0 0 2px var(--pink); }
+  .btns { display: flex; gap: 8px; }
+  .btn {
+    height: 44px; padding: 0 20px; border-radius: 12px; border: 0; cursor: pointer; font-weight: 700;
+    background: linear-gradient(180deg, #ffd780, #f0a23b); color: #2b1a04;
+    box-shadow: 0 8px 22px -10px rgba(255, 175, 70, .9);
+    transition: transform 140ms ease, filter 140ms ease;
+  }
+  .btn:hover { filter: brightness(1.06); transform: translateY(-1px); }
+  .btn:active { transform: translateY(1px); }
+  .btn:disabled { opacity: .5; cursor: default; transform: none; filter: none; }
+  .btn.ghost { background: var(--chip); color: var(--ink); border: 1px solid var(--card-line); box-shadow: none; font-weight: 500; }
+
+  /* two cards row */
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 18px; }
+  .play { padding: 20px 22px 22px; display: grid; grid-template-columns: 172px 1fr; gap: 18px; align-items: center; }
+  .play .head { grid-column: 1 / -1; }
+  .stage-sm { display: grid; place-items: center; }
+  .stage-sm .shadow { width: 90px; height: 12px; border-radius: 50%; background: radial-gradient(closest-side, rgba(0, 0, 0, .45), transparent); margin-top: -4px; }
+
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+  .stat { background: var(--chip); border: 1px solid var(--card-line); border-radius: 14px; padding: 8px 12px; }
+  .stat span { display: block; font-size: .8rem; color: var(--muted); }
+  .stat b { display: flex; align-items: center; gap: 6px; font-family: "Suez One", Georgia, serif; font-weight: 400; font-size: 1.5rem; line-height: 1.2; }
+  .coin { width: 14px; height: 14px; border-radius: 50%; flex: none; background: radial-gradient(circle at 35% 30%, #fff3c4, #f0b23e 55%, #a86a10); }
+  .msg { min-height: 2.9em; margin: 0 0 10px; font-size: .95rem; color: var(--muted); }
+  .msg b { font-family: "Suez One", Georgia, serif; font-weight: 400; color: var(--gold); font-size: 1.35rem; margin-inline-end: 6px; }
+
+  .toppings { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .top-chip {
+    height: 34px; padding: 0 12px; border-radius: 999px; cursor: pointer; font-size: .88rem;
+    border: 1px solid var(--card-line); background: var(--chip);
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .top-chip i { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+  .top-chip[aria-pressed="true"] { border-color: var(--gold); background: rgba(255, 200, 97, .14); }
+  #donutBtn { background: none; border: 0; padding: 0; cursor: pointer; border-radius: 50%; }
+  #donutBtn svg { display: block; width: 172px; height: auto; transition: transform 160ms ease; }
+  #donutBtn:active svg { transform: scale(.95); }
+  .donut-g { transition: opacity 400ms ease, transform 400ms ease; transform-origin: 120px 110px; }
+  .donut-g.gone { opacity: 0; transform: scale(.85); }
+
+  footer { text-align: center; color: var(--faint); margin-top: 28px; font-family: "Suez One", Georgia, serif; font-size: 1.15rem; }
+
+  @media (max-width: 860px) {
+    .row { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 520px) {
+    .play { grid-template-columns: 1fr; text-align: center; }
+    .toppings, .btns { justify-content: center; }
+    .controls { justify-content: center; }
+    .nights { justify-content: center; }
+    .cd { width: 62px; }
+    .menorah-card { padding: 18px 12px 16px; }
+    .menorah-head { flex-direction: column; align-items: center; text-align: center; gap: 4px; }
+    .controls { flex-direction: column; }
+    .nights { display: grid; grid-template-columns: repeat(8, 1fr); width: 100%; gap: 4px; }
+    .chip { min-width: 0; height: 40px; padding: 0; font-size: 1rem; border-radius: 10px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sky i { animation: none; }
+    .flame.on, .flame.out { animation: none; }
+    .flame.on { transform: scale(1); opacity: 1; }
+    .flame.on .fb, .flame.on .halo { animation: none; }
+    .smoke { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="sky" id="sky"></div>
+<div class="bokeh"></div>
+
+<main class="wrap">
+  <header class="hero">
+    <h1>אור של חנוכה</h1>
+    <svg class="bunting" id="bunting" viewBox="0 0 380 34" aria-hidden="true"></svg>
+    <p class="lead">בוחרים לילה, מדליקים את החנוכייה, מסובבים סביבון ונותנים ביס בסופגנייה.</p>
+    <div class="countdown" id="countdown" aria-live="off">
+      <div class="cd"><b id="cdD">0</b><span>ימים</span></div>
+      <div class="cd"><b id="cdH">0</b><span>שעות</span></div>
+      <div class="cd"><b id="cdM">0</b><span>דקות</span></div>
+      <div class="cd"><b id="cdS">0</b><span>שניות</span></div>
+    </div>
+    <p class="cd-note" id="cdNote">עד <strong>ערב חנוכה</strong>, יום שישי 4 בדצמבר</p>
+  </header>
+
+  <!-- Menorah -->
+  <section class="card menorah-card" aria-labelledby="mH">
+    <div class="glow" id="glow"></div>
+    <div class="menorah-head">
+      <div>
+        <h2 id="mH">החנוכייה</h2>
+        <p class="hint">בחרו לילה ולחצו על הדלקה</p>
+      </div>
+      <div class="night-label" id="nightLabel">לילה ח׳</div>
+    </div>
+
+    <svg class="menorah" id="menorah" viewBox="0 28 560 332" role="img" aria-label="חנוכייה">
+      <defs>
+        <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#fff0b8"/>
+          <stop offset=".45" stop-color="#f1b84e"/>
+          <stop offset="1" stop-color="#a86a14"/>
+        </linearGradient>
+        <linearGradient id="goldH" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#9a5f12"/>
+          <stop offset=".4" stop-color="#ffe39a"/>
+          <stop offset=".6" stop-color="#f3c065"/>
+          <stop offset="1" stop-color="#9a5f12"/>
+        </linearGradient>
+        <linearGradient id="shade" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#000" stop-opacity=".28"/>
+          <stop offset=".35" stop-color="#fff" stop-opacity=".22"/>
+          <stop offset=".6" stop-color="#fff" stop-opacity="0"/>
+          <stop offset="1" stop-color="#000" stop-opacity=".3"/>
+        </linearGradient>
+        <linearGradient id="fire" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0" stop-color="#ff7417"/>
+          <stop offset=".5" stop-color="#ffb43a"/>
+          <stop offset="1" stop-color="#fff0b0"/>
+        </linearGradient>
+        <radialGradient id="haloG">
+          <stop offset="0" stop-color="#ffd27a" stop-opacity=".8"/>
+          <stop offset=".5" stop-color="#ffa63c" stop-opacity=".22"/>
+          <stop offset="1" stop-color="#ff8a20" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="floor"><stop offset="0" stop-color="#000" stop-opacity=".45"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+        <g id="patterns"></g>
+      </defs>
+
+      <ellipse cx="280" cy="348" rx="120" ry="8" fill="url(#floor)"/>
+      <g id="arms" fill="none" stroke="url(#gold)" stroke-width="5" stroke-linecap="round"></g>
+      <rect x="273" y="236" width="14" height="96" rx="5" fill="url(#goldH)"/>
+      <ellipse cx="280" cy="272" rx="10" ry="8" fill="url(#gold)"/>
+      <ellipse cx="280" cy="304" rx="8" ry="7" fill="url(#gold)"/>
+      <path d="M218,343 Q280,306 342,343 Z" fill="url(#gold)"/>
+      <rect x="206" y="340" width="148" height="9" rx="4.5" fill="url(#goldH)"/>
+      <rect x="40" y="232" width="480" height="12" rx="6" fill="url(#gold)"/>
+      <rect x="276" y="170" width="8" height="64" rx="3" fill="url(#goldH)"/>
+      <g id="cups"></g>
+      <g id="candles"></g>
+      <g id="smokes"></g>
+    </svg>
+
+    <div class="controls">
+      <div class="nights" id="nights" role="group" aria-label="בחירת לילה"></div>
+      <div class="btns">
+        <button class="btn" id="lightBtn" type="button">הדלקה</button>
+        <button class="btn ghost" id="outBtn" type="button">כיבוי</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="row">
+    <!-- Dreidel -->
+    <section class="card play" aria-labelledby="dH">
+      <div class="head">
+        <h2 id="dH">סביבון</h2>
+        <p class="hint">בכל סיבוב מניחים מטבע בקופה</p>
+      </div>
+      <div class="stage-sm">
+        <svg viewBox="0 0 160 210" width="130" aria-hidden="true" style="overflow:visible">
+          <defs>
+            <linearGradient id="dFront" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#6d8bff"/>
+              <stop offset="1" stop-color="#4b3fd6"/>
+            </linearGradient>
+            <linearGradient id="dSide" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#3a2fb0"/>
+              <stop offset="1" stop-color="#271f80"/>
+            </linearGradient>
+          </defs>
+          <g id="dreidel" style="transform-origin: 78px 196px">
+            <g id="dFace" style="transform-origin: 80px 110px">
+              <rect x="66" y="4" width="14" height="46" rx="6" fill="url(#goldH)"/>
+              <path id="dSideFace" d="M114,50 L132,40 L132,122 L114,132 Z" fill="url(#dSide)"/>
+              <path d="M114,128 L132,118 L80,194 Z" fill="#231b70"/>
+              <rect x="30" y="46" width="86" height="86" rx="14" fill="url(#dFront)"/>
+              <path d="M30,126 L116,126 L78,198 Z" fill="url(#dFront)"/>
+              <rect x="36" y="52" width="74" height="10" rx="5" fill="#fff" opacity=".18"/>
+              <text id="dLetter" x="73" y="111" text-anchor="middle" font-family="Suez One, Georgia, serif" font-size="58" fill="#ffd56b">נ</text>
+            </g>
+          </g>
+        </svg>
+        <div class="shadow" id="dShadow"></div>
+      </div>
+      <div>
+        <div class="stats">
+          <div class="stat"><span>שלך</span><b><i class="coin"></i><em id="mine" style="font-style:normal">10</em></b></div>
+          <div class="stat"><span>בקופה</span><b><i class="coin"></i><em id="pot" style="font-style:normal">2</em></b></div>
+        </div>
+        <p class="msg" id="dMsg" aria-live="polite">לחצו על ״סובב״ כדי להתחיל.</p>
+        <div class="btns">
+          <button class="btn" id="spinBtn" type="button">סובב</button>
+          <button class="btn ghost" id="resetBtn" type="button">משחק חדש</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sufganiyot -->
+    <section class="card play" aria-labelledby="sH">
+      <div class="head">
+        <h2 id="sH">סופגניות</h2>
+        <p class="hint">בחרו ציפוי ולחצו על הסופגנייה</p>
+      </div>
+      <div class="stage-sm">
+        <button id="donutBtn" type="button" aria-label="ביס בסופגנייה">
+          <svg viewBox="0 0 240 200" aria-hidden="true">
+            <defs>
+              <radialGradient id="dough" cx=".45" cy=".35" r=".75">
+                <stop offset="0" stop-color="#f7c47a"/>
+                <stop offset=".55" stop-color="#d98a3a"/>
+                <stop offset="1" stop-color="#8e4d17"/>
+              </radialGradient>
+              <linearGradient id="band" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#f6dcae" stop-opacity="0"/>
+                <stop offset=".5" stop-color="#fbe7c2" stop-opacity=".95"/>
+                <stop offset="1" stop-color="#f6dcae" stop-opacity="0"/>
+              </linearGradient>
+              <radialGradient id="jamG" cx=".4" cy=".35">
+                <stop offset="0" stop-color="#ff5a6e"/>
+                <stop offset="1" stop-color="#a3132c"/>
+              </radialGradient>
+              <mask id="biteMask" maskUnits="userSpaceOnUse" x="0" y="0" width="240" height="200">
+                <rect width="240" height="200" fill="#fff"/>
+                <g id="bites" fill="#000"></g>
+              </mask>
+              <radialGradient id="dShadowG"><stop offset="0" stop-color="#000" stop-opacity=".45"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+            </defs>
+            <ellipse cx="120" cy="178" rx="84" ry="12" fill="url(#dShadowG)"/>
+            <g class="donut-g" id="donutG" mask="url(#biteMask)">
+              <ellipse cx="120" cy="112" rx="92" ry="64" fill="url(#dough)"/>
+              <ellipse cx="120" cy="124" rx="91" ry="10" fill="url(#band)"/>
+              <ellipse cx="116" cy="88" rx="58" ry="24" fill="#fff" opacity=".1"/>
+              <g id="tSugar">
+                <ellipse cx="120" cy="96" rx="80" ry="40" fill="#fff" opacity=".55"/>
+                <g id="sugarDots" fill="#fff"></g>
+              </g>
+              <g id="tChoc" style="display:none">
+                <path d="M34,104 C40,64 200,64 206,104 C206,112 198,108 194,118 C190,128 182,112 176,116 C168,122 162,132 156,118 C150,108 140,124 132,116 C124,108 116,128 106,118 C98,110 90,124 82,114 C74,106 66,122 58,112 C50,104 42,116 34,104 Z" fill="#4a2414"/>
+                <path d="M60,86 C90,70 150,70 180,86" stroke="#fff" stroke-opacity=".18" stroke-width="6" fill="none" stroke-linecap="round"/>
+                <g id="sprinkles"></g>
+              </g>
+              <g id="tJam" style="display:none">
+                <ellipse cx="120" cy="96" rx="80" ry="40" fill="#fff" opacity=".45"/>
+                <path d="M96,82 C96,64 144,64 144,82 C144,92 134,92 130,100 C126,92 114,96 110,90 C104,94 96,92 96,82 Z" fill="url(#jamG)"/>
+                <ellipse cx="112" cy="74" rx="7" ry="3.5" fill="#fff" opacity=".55"/>
+              </g>
+              <g id="tCaramel" style="display:none">
+                <path d="M40,100 C46,66 194,66 200,100 C186,110 170,98 156,108 C140,96 126,110 112,100 C98,110 84,96 70,106 C58,98 50,108 40,100 Z" fill="#c98432"/>
+                <path d="M56,92 C80,80 100,96 122,82 C144,70 166,92 186,84" stroke="#f3cc8a" stroke-width="4" fill="none" stroke-linecap="round"/>
+                <path d="M66,80 C90,70 104,84 126,72 C146,62 160,76 176,72" stroke="#7a3f12" stroke-width="3" fill="none" stroke-linecap="round" opacity=".6"/>
+              </g>
+            </g>
+          </svg>
+        </button>
+      </div>
+      <div>
+        <div class="toppings" id="toppings" role="group" aria-label="ציפוי">
+          <button class="top-chip" type="button" data-t="tSugar" aria-pressed="true"><i style="background:#fff"></i>אבקת סוכר</button>
+          <button class="top-chip" type="button" data-t="tJam" aria-pressed="false"><i style="background:#e0263f"></i>ריבה</button>
+          <button class="top-chip" type="button" data-t="tChoc" aria-pressed="false"><i style="background:#5a2c16"></i>שוקולד</button>
+          <button class="top-chip" type="button" data-t="tCaramel" aria-pressed="false"><i style="background:#c98432"></i>ריבת חלב</button>
+        </div>
+        <div class="stats">
+          <div class="stat"><span>ביסים</span><b id="biteCount">0</b></div>
+          <div class="stat"><span>סופגניות</span><b id="donutCount">0</b></div>
+        </div>
+        <p class="msg" id="sMsg" aria-live="polite">כל סופגנייה נגמרת בארבעה ביסים.</p>
+      </div>
+    </section>
+  </div>
+
+  <footer>חנוכה שמח ומואר</footer>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var NS = "http://www.w3.org/2000/svg";
+  function el(tag, attrs, parent) {
+    var n = document.createElementNS(NS, tag);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+
+  /* ---------- stars ---------- */
+  var sky = document.getElementById("sky");
+  for (var s = 0; s < 70; s++) {
+    var st = document.createElement("i");
+    st.style.left = (Math.random() * 100) + "%";
+    st.style.top = (Math.random() * 100) + "%";
+    var sz = Math.random() < .2 ? 3 : 2;
+    st.style.width = st.style.height = sz + "px";
+    st.style.animationDelay = (Math.random() * 3.5).toFixed(2) + "s";
+    st.style.animationDuration = (2.5 + Math.random() * 3).toFixed(2) + "s";
+    sky.appendChild(st);
+  }
+
+  /* ---------- bunting ---------- */
+  var COLORS = ["#ff6fa5", "#a970ff", "#5b8cff", "#26c6da", "#3ad07a", "#ffd23f", "#ff9a3c", "#ff5470"];
+  var bunting = document.getElementById("bunting");
+  el("path", { d: "M4,4 Q190,16 376,4", stroke: "rgba(255,255,255,.35)", "stroke-width": 1.2, fill: "none" }, bunting);
+  for (var f = 0; f < 15; f++) {
+    var t = (f + .5) / 15;
+    var x = 4 + t * 372;
+    var y = 4 + 12 * 4 * t * (1 - t) * .5 + 1;
+    el("path", { d: "M" + (x - 9) + "," + y + " L" + (x + 9) + "," + y + " L" + x + "," + (y + 19) + " Z", fill: COLORS[f % 8] }, bunting);
+  }
+
+  /* ---------- menorah ---------- */
+  var SLOTS = [60, 115, 170, 225, 335, 390, 445, 500];
+  var SH = 280;
+  var CANDLE_COLORS = ["#ec4f9a", "#a259f0", "#4f7cf0", "#22b8cf", "#2fbf6a", "#f2c12e", "#f5862e", "#ee4b5b"];
+  var ORD = ["א׳", "ב׳", "ג׳", "ד׳", "ה׳", "ו׳", "ז׳", "ח׳"];
+  var DATES = ["שישי 4.12", "מוצ״ש 5.12", "ראשון 6.12", "שני 7.12", "שלישי 8.12", "רביעי 9.12", "חמישי 10.12", "שישי 11.12"];
+
+  var arms = document.getElementById("arms");
+  [55, 110, 165, 220].forEach(function (d) {
+    el("path", { d: "M" + (SH - d) + ",244 Q" + SH + "," + (244 + d * .62) + " " + (SH + d) + ",244" }, arms);
+  });
+
+  var patterns = document.getElementById("patterns");
+  CANDLE_COLORS.forEach(function (c, i) {
+    var p = el("pattern", { id: "st" + i, width: 9, height: 9, patternUnits: "userSpaceOnUse", patternTransform: "rotate(-35)" }, patterns);
+    el("rect", { width: 9, height: 9, fill: c }, p);
+    el("rect", { width: 3.5, height: 9, fill: "rgba(255,255,255,.38)" }, p);
+  });
+
+  var cups = document.getElementById("cups");
+  function cup(x, top) {
+    el("path", { d: "M" + (x - 14) + "," + top + " L" + (x + 14) + "," + top + " Q" + (x + 12) + "," + (top + 12) + " " + x + "," + (top + 12) + " Q" + (x - 12) + "," + (top + 12) + " " + (x - 14) + "," + top + " Z", fill: "url(#gold)" }, cups);
+    el("ellipse", { cx: x, cy: top, rx: 14, ry: 3, fill: "#ffe7a0" }, cups);
+  }
+  SLOTS.forEach(function (x) { cup(x, 222); });
+  cup(SH, 160);
+
+  var candlesG = document.getElementById("candles");
+  function candle(x, top, h, fill, tint) {
+    var g = el("g", {}, candlesG);
+    el("rect", { x: x - 7, y: top, width: 14, height: h, rx: 2, fill: fill }, g);
+    el("rect", { x: x - 7, y: top, width: 14, height: h, rx: 2, fill: "url(#shade)" }, g);
+    el("ellipse", { cx: x, cy: top, rx: 7, ry: 2.2, fill: tint }, g);
+    el("line", { x1: x, y1: top, x2: x, y2: top - 6, stroke: "#2a2018", "stroke-width": 1.8, "stroke-linecap": "round" }, g);
+    var fl = el("g", { class: "flame" }, g);
+    el("circle", { class: "halo", cx: x, cy: top - 18, r: 30, fill: "url(#haloG)" }, fl);
+    var b = el("g", { class: "fb" }, fl);
+    el("path", { d: "M" + x + "," + (top - 34) + " C" + (x + 8) + "," + (top - 22) + " " + (x + 9) + "," + (top - 12) + " " + (x + 6) + "," + (top - 6) + " C" + (x + 3) + "," + (top - 1) + " " + (x - 3) + "," + (top - 1) + " " + (x - 6) + "," + (top - 6) + " C" + (x - 9) + "," + (top - 12) + " " + (x - 8) + "," + (top - 22) + " " + x + "," + (top - 34) + " Z", fill: "url(#fire)" }, b);
+    el("path", { d: "M" + x + "," + (top - 19) + " C" + (x + 3.5) + "," + (top - 13) + " " + (x + 4) + "," + (top - 8) + " " + (x + 2.5) + "," + (top - 5) + " C" + (x + 1) + "," + (top - 3) + " " + (x - 1) + "," + (top - 3) + " " + (x - 2.5) + "," + (top - 5) + " C" + (x - 4) + "," + (top - 8) + " " + (x - 3.5) + "," + (top - 13) + " " + x + "," + (top - 19) + " Z", fill: "#fffbe6" }, b);
+    return { flame: fl, x: x, top: top };
+  }
+
+  var shamash = candle(SH, 92, 68, "#fbf3df", "#fffaf0");
+  var flames = SLOTS.map(function (x, i) { return candle(x, 152, 70, "url(#st" + i + ")", "rgba(255,255,255,.55)"); });
+
+  var glow = document.getElementById("glow");
+  var nightLabel = document.getElementById("nightLabel");
+  var nightsEl = document.getElementById("nights");
+  var lightBtn = document.getElementById("lightBtn");
+  var outBtn = document.getElementById("outBtn");
+  var smokes = document.getElementById("smokes");
+  var night = 8, timers = [], lit = [];
+
+  function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+  function setGlow() { glow.style.opacity = lit.length ? Math.min(1, .2 + lit.length * .1) : 0; }
+
+  function extinguish(withSmoke) {
+    clearTimers();
+    lit.forEach(function (c) {
+      c.flame.classList.remove("on");
+      if (withSmoke) {
+        c.flame.classList.add("out");
+        if (!reduce) {
+          var sm = el("path", { class: "smoke", d: "M" + c.x + "," + (c.top - 7) + " q-4,-8 0,-16 q4,-8 0,-16" }, smokes);
+          setTimeout(function () { sm.remove(); }, 1500);
+        }
+      } else c.flame.classList.remove("out");
+    });
+    lit = [];
+    setGlow();
+    lightBtn.disabled = false;
+  }
+
+  function lightUp() {
+    extinguish(false);
+    [shamash].concat(flames).forEach(function (c) { c.flame.classList.remove("out"); });
+    lightBtn.disabled = true;
+    var seq = flames.slice(8 - night).concat([shamash]);
+    var gap = reduce ? 0 : 420;
+    seq.forEach(function (c, i) {
+      timers.push(setTimeout(function () {
+        c.flame.classList.add("on");
+        lit.push(c);
+        setGlow();
+        if (i === seq.length - 1) lightBtn.disabled = false;
+      }, 120 + i * gap));
+    });
+  }
+
+  function selectNight(n) {
+    night = n;
+    nightLabel.textContent = "לילה " + ORD[n - 1] + ", " + DATES[n - 1];
+    Array.prototype.forEach.call(nightsEl.children, function (b, i) {
+      b.setAttribute("aria-pressed", i === n - 1 ? "true" : "false");
+    });
+  }
+
+  ORD.forEach(function (o, i) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "chip";
+    b.textContent = o;
+    b.title = DATES[i];
+    b.setAttribute("aria-label", "לילה " + o + ", " + DATES[i]);
+    b.addEventListener("click", function () { selectNight(i + 1); lightUp(); });
+    nightsEl.appendChild(b);
+  });
+  lightBtn.addEventListener("click", lightUp);
+  outBtn.addEventListener("click", function () { extinguish(true); });
+
+  /* ---------- countdown ---------- */
+  var target = new Date(2026, 11, 4, 16, 0, 0);
+  var firstDay = new Date(2026, 11, 4);
+  var cdBox = document.getElementById("countdown");
+  var cdNote = document.getElementById("cdNote");
+  function pad(v) { return v < 10 ? "0" + v : "" + v; }
+  function tick() {
+    var ms = target - new Date();
+    if (ms <= 0) {
+      cdBox.style.display = "none";
+      var today = new Date(); today.setHours(0, 0, 0, 0);
+      var idx = Math.round((today - firstDay) / 86400000);
+      cdNote.textContent = (idx >= 0 && idx < 8) ? "הערב מדליקים נר " + ORD[idx] + ". חנוכה שמח!" : "חנוכה שמח!";
+      return false;
+    }
+    var sec = Math.floor(ms / 1000);
+    document.getElementById("cdD").textContent = Math.floor(sec / 86400);
+    document.getElementById("cdH").textContent = pad(Math.floor(sec % 86400 / 3600));
+    document.getElementById("cdM").textContent = pad(Math.floor(sec % 3600 / 60));
+    document.getElementById("cdS").textContent = pad(sec % 60);
+    return true;
+  }
+  if (tick()) { var iv = setInterval(function () { if (!tick()) clearInterval(iv); }, 1000); }
+
+  var startNight = 8;
+  (function () {
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    var idx = Math.round((today - firstDay) / 86400000);
+    if (idx >= 0 && idx < 8) {
+      startNight = idx + 1;
+      nightsEl.children[idx].classList.add("tonight");
+    }
+  })();
+  selectNight(startNight);
+  setTimeout(lightUp, reduce ? 0 : 600);
+
+  /* ---------- dreidel ---------- */
+  var LETTERS = ["נ", "ג", "ה", "פ"];
+  var MSG = { "נ": "לא קורה כלום, מסובבים שוב.", "ג": "לוקחים את כל הקופה!", "ה": "לוקחים חצי מהקופה.", "פ": "מוסיפים מטבע לקופה." };
+  var dreidel = document.getElementById("dreidel");
+  var dFace = document.getElementById("dFace");
+  var dLetter = document.getElementById("dLetter");
+  var dSide = document.getElementById("dSideFace");
+  var dShadow = document.getElementById("dShadow");
+  var spinBtn = document.getElementById("spinBtn");
+  var resetBtn = document.getElementById("resetBtn");
+  var mineEl = document.getElementById("mine"), potEl = document.getElementById("pot"), dMsg = document.getElementById("dMsg");
+  var mine = 10, pot = 2, dIdx = 0, spinning = false;
+  dreidel.style.transform = "rotate(12deg)";
+
+  function purse() {
+    mineEl.textContent = mine; potEl.textContent = pot;
+    spinBtn.disabled = spinning || mine < 1;
+  }
+  function spin() {
+    if (spinning || mine < 1) return;
+    spinning = true; mine -= 1; pot += 1; purse();
+    dMsg.textContent = "מסתובב…";
+    var target = Math.floor(Math.random() * 4);
+    var K = 24 + ((target - dIdx + 4) % 4);
+    var PHI = Math.PI * K, T = reduce ? 250 : 2600, start = dIdx, t0 = performance.now();
+    function frame(now) {
+      var t = Math.min(1, (now - t0) / T);
+      var p = PHI * (1 - Math.pow(1 - t, 3));
+      var c = Math.cos(p);
+      dFace.style.transform = "scaleX(" + Math.max(.07, Math.abs(c)).toFixed(3) + ")";
+      dSide.style.opacity = c < 0 ? 0 : 1;
+      dLetter.textContent = LETTERS[(start + Math.floor((p + Math.PI / 2) / Math.PI)) % 4];
+      var w = 1 - t;
+      dreidel.style.transform = "translateY(" + (-12 * Math.sin(Math.PI * Math.min(1, t * 1.15)) * w).toFixed(2) + "px) rotate(" + (Math.sin(now / 36) * 7 * w + 12 * t).toFixed(2) + "deg)";
+      dShadow.style.transform = "scaleX(" + (.7 + .3 * t).toFixed(3) + ")";
+      if (t < 1) requestAnimationFrame(frame); else land(target);
+    }
+    requestAnimationFrame(frame);
+  }
+  function land(target) {
+    dIdx = target;
+    var L = LETTERS[target];
+    dLetter.textContent = L; dFace.style.transform = "scaleX(1)"; dSide.style.opacity = 1;
+    if (L === "ג") { mine += pot; pot = 0; }
+    else if (L === "ה") { var h = Math.ceil(pot / 2); mine += h; pot -= h; }
+    else if (L === "פ" && mine > 0) { mine -= 1; pot += 1; }
+    dMsg.innerHTML = "<b>" + L + "</b>" + MSG[L] + (mine < 1 ? " נגמרו המטבעות." : "");
+    spinning = false; purse();
+  }
+  spinBtn.addEventListener("click", spin);
+  resetBtn.addEventListener("click", function () {
+    if (spinning) return;
+    mine = 10; pot = 2; dMsg.textContent = "לחצו על ״סובב״ כדי להתחיל."; purse();
+  });
+  purse();
+
+  /* ---------- sufganiyot ---------- */
+  var sugarDots = document.getElementById("sugarDots");
+  for (var i = 0; i < 70; i++) {
+    var a = Math.random() * Math.PI * 2, r = Math.sqrt(Math.random());
+    el("circle", { cx: (120 + Math.cos(a) * r * 74).toFixed(1), cy: (96 + Math.sin(a) * r * 34).toFixed(1), r: (Math.random() * 1.6 + .6).toFixed(2), opacity: (.6 + Math.random() * .4).toFixed(2) }, sugarDots);
+  }
+  var sprinkles = document.getElementById("sprinkles");
+  for (var j = 0; j < 26; j++) {
+    var a2 = Math.random() * Math.PI * 2, r2 = Math.sqrt(Math.random());
+    var sx = 120 + Math.cos(a2) * r2 * 66, sy = 92 + Math.sin(a2) * r2 * 20;
+    el("rect", { x: sx.toFixed(1), y: sy.toFixed(1), width: 7, height: 2.4, rx: 1.2, fill: COLORS[j % 8], transform: "rotate(" + Math.floor(Math.random() * 180) + " " + sx.toFixed(1) + " " + sy.toFixed(1) + ")" }, sprinkles);
+  }
+
+  var TOPS = ["tSugar", "tJam", "tChoc", "tCaramel"];
+  var topChips = document.getElementById("toppings");
+  topChips.addEventListener("click", function (e) {
+    var b = e.target.closest(".top-chip");
+    if (!b) return;
+    Array.prototype.forEach.call(topChips.children, function (c) { c.setAttribute("aria-pressed", c === b ? "true" : "false"); });
+    TOPS.forEach(function (id) { document.getElementById(id).style.display = id === b.dataset.t ? "" : "none"; });
+  });
+
+  var bitesG = document.getElementById("bites");
+  var donutG = document.getElementById("donutG");
+  var donutBtn = document.getElementById("donutBtn");
+  var biteCountEl = document.getElementById("biteCount"), donutCountEl = document.getElementById("donutCount"), sMsg = document.getElementById("sMsg");
+  var bites = 0, totalBites = 0, donuts = 0, busy = false;
+  var ANGLES = [-.35, Math.PI + .3, Math.PI / 2 - .2, -Math.PI / 2 + .5];
+  var LINES = ["טעים!", "עוד ביס…", "כמעט נגמרה", ""];
+
+  donutBtn.addEventListener("click", function () {
+    if (busy) return;
+    var base = ANGLES[bites] + (Math.random() - .5) * .4;
+    var cx = 120 + Math.cos(base) * 92, cy = 112 + Math.sin(base) * 64;
+    var tx = -Math.sin(base), ty = Math.cos(base);
+    [[0, 0, 19], [13, 5, 15], [-13, 5, 15]].forEach(function (o) {
+      var ox = cx + tx * o[0] - Math.cos(base) * o[1];
+      var oy = cy + ty * o[0] - Math.sin(base) * o[1];
+      el("circle", { cx: ox.toFixed(1), cy: oy.toFixed(1), r: o[2] }, bitesG);
+    });
+    bites++; totalBites++;
+    biteCountEl.textContent = totalBites;
+    sMsg.textContent = LINES[bites - 1];
+    if (bites >= 4) {
+      busy = true;
+      donutG.classList.add("gone");
+      donuts++;
+      donutCountEl.textContent = donuts;
+      sMsg.textContent = "נגמרה! הנה עוד אחת.";
+      setTimeout(function () {
+        bitesG.innerHTML = "";
+        bites = 0;
+        donutG.classList.remove("gone");
+        busy = false;
+      }, reduce ? 50 : 650);
+    }
+  });
+})();
+</script>
+</body>
+</html>
